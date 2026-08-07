@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')//permet de valider l'unicité des champs dans le schéma Mongoose.
+const uniqueValidator = require('mongoose-unique-validator').default//permet de valider l'unicité des champs dans le schéma Mongoose.
 
 const userSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},

@@ -10,10 +10,10 @@ exports.signup = (req, res, next) =>{
             password: hash
         });
         user.save()
-        .then(() => res.status(200).json({message:"utilisateur cree avec succes"}))
-        .catch((err) => res.status(500).json({err}))
+        .then(() => res.status(201).json({message:"utilisateur cree avec succes"}))
+        .catch((err) => res.status(400).json({err}))
     })
-    .catch((err) => res.status(500).json({err}))
+    .catch((err) => res.status(400).json({err}))
 
 }
 

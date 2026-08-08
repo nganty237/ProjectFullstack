@@ -5,7 +5,8 @@ exports.createThing = (req, res, next) => {
 delete req.body._id
 req.body.imageUrl = cleanImageUrl(req.body.imageUrl)
 const thing = new Thing({
-    ...req.body
+    ...req.body,
+    userId: req.auth.userId
 })
 thing.save()
 .then(() => res.status(201).json({message:"donnees post ees avec succes "}))

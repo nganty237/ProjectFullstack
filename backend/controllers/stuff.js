@@ -1,22 +1,28 @@
 const Thing = require('../models/things')
 const { cleanImageUrl, cleanThingImageUrl } = require('../utils/cleanImageUrl')
-
+ 
 exports.createThing = (req, res, next) => {
-delete req.body._id
-req.body.imageUrl = cleanImageUrl(req.body.imageUrl)
-const thing = new Thing({
-    ...req.body,
-    userId: req.auth.userId
-})
-thing.save()
-.then(() => res.status(201).json({message:"donnees post ees avec succes "}))
-.catch((err) => res.status(400).json({error: err}))
-}
+    const thingObject = JSON.parse(req.body.thing);
+    delete thingObject._id;
+    delete thingObject.userId;
+    const thing = new Thing({
+        ...thingObject,
+        userId: req.auth.userId,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    });
+    thing.save()
+        .then(() => res.status(201).json({ message: "donnees postees avec succes " }))
+        .catch((err) => {
+            console.log("Erreur d'enregistrement MongoDB :", err); // Affiche l'erreur exacte dans le terminal
+            res.status(400).json({ error: err.message || err });
+        });
+};
 
 exports.updateThing = (req, res, next) => {
-    Thing.updateOne({_id:req.params.id}, {...req.body, _id:req.params.id})
-    .then(() => res.status(200).json({message:"donnees modifiees avec succes"}))
-    .catch((err) => res.status(400).json({error:err}))
+    const thingObject = req.file ? { ...JSON.parse(req.body.thing), 
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : { ...req.body }
+    delete thingObject.userId;
+
 }
 
 exports.deleteThing = (req, res, next) => {

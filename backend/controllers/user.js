@@ -38,7 +38,6 @@ exports.signin = (req, res, next) =>{
                             {expiresIn: "24h"}
                         )
                     })
-
                 }
             })
             .catch((err) => res.status(500).json({err}))

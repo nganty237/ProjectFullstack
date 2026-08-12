@@ -7,9 +7,8 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/user'
-import { SignupBody, SigninBody } from '../types'
 
-export const signup = async (req: Request<{}, {}, SignupBody>, res: Response): Promise<void> => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10)
     const user = new User({ email: req.body.email, password: hash })
@@ -20,7 +19,7 @@ export const signup = async (req: Request<{}, {}, SignupBody>, res: Response): P
   }
 }
 
-export const signin = async (req: Request<{}, {}, SigninBody>, res: Response): Promise<void> => {
+export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOne({ email: req.body.email })
 

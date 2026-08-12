@@ -4,7 +4,6 @@
  */
 
 export interface IThing {
-  _id?: string
   title: string
   description: string
   imageUrl: string
@@ -13,7 +12,6 @@ export interface IThing {
 }
 
 export interface IUser {
-  _id?: string
   email: string
   password: string
 }

@@ -9,7 +9,7 @@ import Thing from '../models/things'
 import { ThingBody } from '../types'
 import { cleanThingImageUrl } from '../utils/cleanImageUrl'
 
-export const createThing = async (req: Request<{}, {}, { thing: string }>, res: Response): Promise<void> => {
+export const createThing = async (req: Request, res: Response): Promise<void> => {
   try {
     const thingObject: ThingBody = JSON.parse(req.body.thing)
     delete thingObject._id
@@ -28,10 +28,10 @@ export const createThing = async (req: Request<{}, {}, { thing: string }>, res: 
   }
 }
 
-export const updateThing = async (req: Request<{ id: string }, {}, ThingBody>, res: Response): Promise<void> => {
+export const updateThing = async (req: Request, res: Response): Promise<void> => {
   try {
     const thingObject: ThingBody = req.file
-      ? { ...JSON.parse((req.body as unknown as { thing: string }).thing), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` }
+      ? { ...JSON.parse(req.body.thing), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` }
       : { ...req.body }
 
     delete thingObject.userId
@@ -55,7 +55,7 @@ export const updateThing = async (req: Request<{ id: string }, {}, ThingBody>, r
   }
 }
 
-export const deleteThing = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
+export const deleteThing = async (req: Request, res: Response): Promise<void> => {
   try {
     const thing = await Thing.findOne({ _id: req.params.id })
 
@@ -79,7 +79,7 @@ export const deleteThing = async (req: Request<{ id: string }>, res: Response): 
   }
 }
 
-export const getOneThing = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
+export const getOneThing = async (req: Request, res: Response): Promise<void> => {
   try {
     const thing = await Thing.findOne({ _id: req.params.id })
 

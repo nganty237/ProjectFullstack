@@ -9,7 +9,7 @@ const cleanImageUrl = (imageUrl: string): string => {
   return imageUrl.trim().replace(/^[\"']|[\"']$/g, '')
 }
 
-const cleanThingImageUrl = (thing: IThingDocument): Record<string, unknown> => {
+const cleanThingImageUrl = (thing: IThingDocument): any => {
   const cleaned = thing.toObject()
   cleaned.imageUrl = cleanImageUrl(cleaned.imageUrl as string)
   return cleaned

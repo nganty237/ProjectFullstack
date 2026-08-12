@@ -1,0 +1,34 @@
+// prisma/schema.prisma
+
+// 1. Le générateur : dit à Prisma de créer le "Prisma Client" (la librairie JS)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. La source de données : connexion à PostgreSQL
+datasource db {
+  provider = "postgresql"
+}
+
+// 3. Tes modèles (= tes tables SQL)
+
+// Équivalent de ton models/user.js (Mongoose)
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  things    Thing[]
+  createdAt DateTime @default(now())
+}
+
+// Équivalent de ton models/things.js (Mongoose)
+model Thing {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String
+  price       Float
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}

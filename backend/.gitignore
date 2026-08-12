@@ -1,2 +1,53 @@
-node_modules
+# ========================
+# Dépendances
+# ========================
+node_modules/
+
+# ========================
+# Variables d'environnement (SÉCURITÉ - ne jamais versionner)
+# ========================
 .env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# ========================
+# Prisma
+# ========================
+# Client généré automatiquement (recréé par `prisma generate`)
+/generated/prisma
+prisma/generated/
+
+# Base de données locale SQLite (si utilisée en dev)
+prisma/dev.db
+prisma/dev.db-journal
+*.db
+*.db-journal
+
+# ========================
+# Uploads / Fichiers utilisateurs
+# ========================
+images/
+
+# ========================
+# Logs
+# ========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# ========================
+# Build / Distribution
+# ========================
+dist/
+build/
+
+# ========================
+# Éditeurs & OS
+# ========================
+.DS_Store
+Thumbs.db
+.vscode/settings.json

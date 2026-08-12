@@ -14,7 +14,7 @@ exports.signup = (req, res, next) =>{
         .catch((err) => res.status(400).json({err}))
     })
     .catch((err) => res.status(400).json({err}))
-
+j
 }
 
 exports.signin = (req, res, next) =>{

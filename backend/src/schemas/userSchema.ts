@@ -6,14 +6,14 @@
 import { z } from 'zod'
 
 export const signupSchema = z.object({
-  email:    z.string().email('Email invalide'),
-  password: z.string({ required_error: 'Le mot de passe est requis' })
+  email:    z.email('Email invalide'),
+  password: z.string({ message: 'Le mot de passe est requis' })
              .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 })
 
 export const signinSchema = z.object({
-  email:    z.string().email('Email invalide'),
-  password: z.string({ required_error: 'Le mot de passe est requis' })
+  email:    z.email('Email invalide'),
+  password: z.string({ message: 'Le mot de passe est requis' })
              .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 })
 

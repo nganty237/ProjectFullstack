@@ -7,7 +7,7 @@ import mongoose, { Schema, Document } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import { IUser } from '../types'
 
-export interface IUserDocument extends IUser, Document {}
+export interface IUserDocument extends Omit<IUser, '_id'>, Document {}
 
 const userSchema = new Schema<IUserDocument>({
   email:    { type: String, required: true, unique: true },

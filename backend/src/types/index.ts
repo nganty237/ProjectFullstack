@@ -29,6 +29,7 @@ export interface SigninBody {
 }
 
 export interface ThingBody {
+  _id?: string
   title?: string
   description?: string
   imageUrl?: string

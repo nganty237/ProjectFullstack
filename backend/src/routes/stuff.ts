@@ -10,7 +10,7 @@ import multer from '../middleware/multer-config'
 
 const router = Router()
 
-router.get('/',     auth, stuffController.getAllThings)
+router.get('/', auth,     stuffController.getAllThings)
 router.post('/',    auth, multer, stuffController.createThing)
 router.get('/:id',  auth, stuffController.getOneThing)
 router.put('/:id',  auth, multer, stuffController.updateThing)

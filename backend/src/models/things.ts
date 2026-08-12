@@ -6,7 +6,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
 import { IThing } from '../types'
 
-export interface IThingDocument extends IThing, Document {}
+export interface IThingDocument extends Omit<IThing, '_id'>, Document {}
 
 const thingSchema = new Schema<IThingDocument>({
   title:       { type: String, required: true },

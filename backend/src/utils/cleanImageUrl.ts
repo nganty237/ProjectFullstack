@@ -1,18 +1,18 @@
 /**
  * @file cleanImageUrl.ts
- * @description Utilitaires de nettoyage des URLs d'images des documents Mongoose.
+ * @description Utilitaires de nettoyage des URLs d'images des objets Prisma.
  */
-
-import { IThingDocument } from '../models/things'
 
 const cleanImageUrl = (imageUrl: string): string => {
   return imageUrl.trim().replace(/^[\"']|[\"']$/g, '')
 }
 
-const cleanThingImageUrl = (thing: IThingDocument): any => {
-  const cleaned = thing.toObject()
-  cleaned.imageUrl = cleanImageUrl(cleaned.imageUrl as string)
-  return cleaned
+const cleanThingImageUrl = <T extends { imageUrl: string }>(thing: T): T => {
+  return {
+    ...thing,
+    imageUrl: cleanImageUrl(thing.imageUrl),
+  }
 }
 
 export { cleanImageUrl, cleanThingImageUrl }
+

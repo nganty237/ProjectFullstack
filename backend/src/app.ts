@@ -5,21 +5,20 @@
 
 import express from 'express'
 import cors from 'cors'
-import mongoose from 'mongoose'
 import path from 'path'
 import 'dotenv/config'
+import prisma from './prisma'
 
 import userRoutes from './routes/user'
 import stuffRoutes from './routes/stuff'
+
+prisma.$connect().then(() => console.log('connect to postgresql'))
+.catch(() => console.log('cannot connect to postgresql'))
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
-
-mongoose.connect(process.env.MONGODB_URI as string)
-  .then(() => console.log('Connexion établie à MongoDB'))
-  .catch((err) => console.error('Connexion MongoDB échouée :', err))
 
 app.use('/api/auth', userRoutes)
 app.use('/api/stuff', stuffRoutes)

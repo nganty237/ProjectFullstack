@@ -36,5 +36,5 @@ export interface ThingBody {
 }
 
 export interface JwtPayload {
-  userId: string
+  userId: number
 }

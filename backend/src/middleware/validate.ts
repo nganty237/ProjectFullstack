@@ -6,8 +6,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { z } from 'zod'
 
-const validate = (schema: z.ZodType) => (req: Request, res: Response, next: NextFunction): void => {
-  const result = schema.safeParse(req.body)
+type RequestLocation = 'body' | 'query' | 'params'
+const validate = (schema: z.ZodType, location: RequestLocation = 'body') => (req: Request, res: Response, next: NextFunction): void => {
+  const result = schema.safeParse(req[location])
 
   if (!result.success) {
     const errors = result.error.issues.map((issue) => ({
@@ -18,7 +19,7 @@ const validate = (schema: z.ZodType) => (req: Request, res: Response, next: Next
     return
   }
 
-  req.body = result.data
+  req[location] = result.data
   next()
 }
 

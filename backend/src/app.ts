@@ -11,6 +11,8 @@ import prisma from './prisma'
 
 import userRoutes from './routes/user'
 import stuffRoutes from './routes/stuff'
+import notFoundHandler from './middleware/notFoundHandler'
+import { errorHandler } from './middleware/errorHandler'
 
 prisma.$connect().then(() => console.log('connect to postgresql'))
 .catch(() => console.log('cannot connect to postgresql'))
@@ -23,5 +25,11 @@ app.use(express.json())
 app.use('/api/auth', userRoutes)
 app.use('/api/stuff', stuffRoutes)
 app.use('/images', express.static(path.join(__dirname, '../images')))
+
+// Middleware pour les routes non trouvées
+app.use(notFoundHandler)
+
+// Middleware pour la gestion des erreurs
+app.use(errorHandler)
 
 export default app

@@ -7,11 +7,21 @@ import { Request, Response } from 'express'
 import fs from 'fs'
 import { ThingBody } from '../types'
 import prisma from '../prisma'
+import { NotFoundError, ForbiddenError, BadRequestError } from '../errors/AppError'
 
 export const createThing = async (req: Request, res: Response): Promise<void> => {
-  try {
+  // 1) Vérifier si un fichier est présent.
+    if (!req.file) {
+      throw new BadRequestError('No file uploaded')
+    }
+  // 2) Vérifier si l'objet 'thing' est présent.
+    if(!req.body.thing){
+      throw new BadRequestError('Thing object missing')
+    }
+    // 3) Parser l'objet 'thing'.
     const thingObject: ThingBody = JSON.parse(req.body.thing)
 
+    // 4) Créer l'objet dans la base de données.
     await prisma.thing.create({
       data: {
         title: thingObject.title as string,
@@ -23,25 +33,19 @@ export const createThing = async (req: Request, res: Response): Promise<void> =>
     })
 
     res.status(201).json({ message: 'Objet créé avec succès' })
-  } catch (err) {
-    res.status(400).json({ error: err })
-  }
 }
 
 export const updateThing = async (req: Request, res: Response): Promise<void> => {
-  try {
     const paramId = req.params.id as string
     const id = parseInt(paramId, 10)
     const thing = await prisma.thing.findUnique({ where: { id } })
 
     if (!thing) {
-      res.status(404).json({ message: 'Objet introuvable' })
-      return
+      throw new NotFoundError('Objet introuvable')
     }
 
     if (thing.userId !== Number(req.auth!.userId)) {
-      res.status(401).json({ message: 'Accès non autorisé' })
-      return
+      throw new ForbiddenError('Accès non autorisé')
     }
 
     const thingObject: ThingBody = req.file
@@ -59,25 +63,19 @@ export const updateThing = async (req: Request, res: Response): Promise<void> =>
     })
 
     res.status(200).json({ message: 'Objet modifié avec succès' })
-  } catch (err) {
-    res.status(400).json({ error: err })
-  }
 }
 
 export const deleteThing = async (req: Request, res: Response): Promise<void> => {
-  try {
     const paramId = req.params.id as string
     const id = parseInt(paramId, 10)
     const thing = await prisma.thing.findUnique({ where: { id } })
 
     if (!thing) {
-      res.status(404).json({ message: 'Objet introuvable' })
-      return
+      throw new NotFoundError('Objet introuvable')
     }
 
     if (thing.userId !== Number(req.auth!.userId)) {
-      res.status(401).json({ message: 'Accès non autorisé' })
-      return
+      throw new ForbiddenError('Accès non autorisé')
     }
 
     const filename = thing.imageUrl.split('/images/')[1]
@@ -85,33 +83,24 @@ export const deleteThing = async (req: Request, res: Response): Promise<void> =>
       await prisma.thing.delete({ where: { id } })
       res.status(200).json({ message: 'Objet supprimé avec succès' })
     })
-  } catch (err) {
-    res.status(400).json({ error: err })
-  }
 }
 
 export const getOneThing = async (req: Request, res: Response): Promise<void> => {
-  try {
     const paramId = req.params.id as string
     const id = Number(paramId)
     const thing = await prisma.thing.findUnique({ where: { id } })
 
     if (!thing) {
-      res.status(404).json({ message: 'Objet introuvable' })
-      return
+      throw new NotFoundError('Objet introuvable')
     }
 
     res.status(200).json(thing)
-  } catch (err) {
-    res.status(404).json({ error: err })
-  }
 }
 
 export const getAllThings = async (_req: Request, res: Response): Promise<void> => {
-  try {
     const things = await prisma.thing.findMany()
+    if (!things){
+      throw new NotFoundError('Objets introuvables')
+    }
     res.status(200).json(things)
-  } catch (err) {
-    res.status(400).json({ error: err })
-  }
 }

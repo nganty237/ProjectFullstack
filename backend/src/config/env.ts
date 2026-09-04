@@ -5,13 +5,12 @@
 
 import dotenv from 'dotenv'
 import {z} from 'zod'
-
 dotenv.config()
 
 const envSchema = z.object({
     MODE_ENV: z
-        .enum(['developpement', 'production', 'test'])
-        .default('developpement'),
+        .enum(['development', 'production', 'test'])
+        .default('development'),
 
     PORT: z.coerce
         .number()
@@ -31,17 +30,20 @@ const envSchema = z.object({
         .default('24h')    
 })
 
-const paredEnv = envSchema.safeParse(process.env)
+const parsedEnv = envSchema.safeParse(process.env)
 
-if(!paredEnv.success){
-    console.error("Erreur de configuration", paredEnv.error)
+if(!parsedEnv.success){
+    console.error("Erreur de configuration", parsedEnv.error)
 
-    paredEnv.error.issues.forEach((issue) => {
+    parsedEnv.error.issues.forEach((issue) => {
         console.error(`- Variable [${issue.path.join('.')}] : ${issue.message}`)
     })
     process.exit(1) 
 }
 
-export const config = Object.freeze(paredEnv.data)
+export const config = Object.freeze(parsedEnv.data)
+console.log(config.PORT)           // number garanti
+console.log(config.JWT_SECRET)     // string garantie non vide
+console.log(config.JWT_EXPIRES_IN) // string '24h'
 
 export type Config = z.infer<typeof envSchema>

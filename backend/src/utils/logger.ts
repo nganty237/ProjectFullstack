@@ -7,7 +7,7 @@ import pino from 'pino'
 import {config} from '../config/env'
 
 
-const isDev = config.MODE_ENV === 'developpement'
+const isDev = config.MODE_ENV === 'development'
 
 export const logger = pino({
     level: isDev ? 'debug' : 'info',

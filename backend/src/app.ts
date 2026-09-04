@@ -13,12 +13,14 @@ import userRoutes from './routes/user'
 import stuffRoutes from './routes/stuff'
 import notFoundHandler from './middleware/notFoundHandler'
 import { errorHandler } from './middleware/errorHandler'
+import httpLogger from './middleware/httpLogger'
+import {logger} from './utils/logger'
 
-prisma.$connect().then(() => console.log('connect to postgresql'))
-.catch(() => console.log('cannot connect to postgresql'))
+prisma.$connect().then(() => logger.info('connect to postgresql'))
+.catch(() => logger.fatal('cannot connect to postgresql'))
 
 const app = express()
-
+app.use(httpLogger)
 app.use(cors())
 app.use(express.json())
 

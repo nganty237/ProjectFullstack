@@ -6,6 +6,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { JwtPayload } from '../types'
+import {config} from '../config/env'
 
 const auth = (req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -16,7 +17,7 @@ const auth = (req: Request, res: Response, next: NextFunction): void => {
       return
     }
 
-    const secret = process.env.JWT_SECRET as string
+    const secret = config.JWT_SECRET
     const decodedToken = jwt.verify(token, secret) as JwtPayload
 
     req.auth = { userId: decodedToken.userId }

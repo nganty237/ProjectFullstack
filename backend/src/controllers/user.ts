@@ -5,9 +5,10 @@
 
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import jwt, {SignOptions} from 'jsonwebtoken'
 import prisma from '../prisma'
 import { UnauthorizedError } from '../errors/AppError'
+import { config } from '../config/env'
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const hash = await bcrypt.hash(req.body.password, 10)
@@ -30,9 +31,10 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
       throw new UnauthorizedError('Paire identifiant / mot de passe incorrecte')
     }
 
-    const secret = process.env.JWT_SECRET as string
+    const secret = config.JWT_SECRET
+    const expiresIn = config.JWT_EXPIRES_IN as SignOptions['expiresIn']
     res.status(200).json({
       userId: user.id,
-      token: jwt.sign({ userId: user.id }, secret, { expiresIn: '24h' }),
+      token: jwt.sign({ userId: user.id }, secret, { expiresIn }),
     })
 }
